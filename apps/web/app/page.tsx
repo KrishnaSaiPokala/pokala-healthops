@@ -8,50 +8,74 @@ async function getJson(path: string) {
   }
 }
 
+function Card({ label, value }: { label: string; value: any }) {
+  return (
+    <div style={{ border: "1px solid #232733", borderRadius: 10, padding: "16px 18px",
+      background: "#151823" }}>
+      <div style={{ color: "#8b93a7", fontSize: 13, textTransform: "uppercase",
+        letterSpacing: 0.5 }}>{label}</div>
+      <div style={{ fontSize: 30, fontWeight: 700, marginTop: 6 }}>{String(value)}</div>
+    </div>
+  );
+}
+
 export default async function Page() {
   const summary = await getJson("/summary");
-  const incidents = await getJson("/incidents");
-  const runs = await getJson("/runs");
-  const dlq = await getJson("/dlq");
-  const quality = await getJson("/quality");
+  const incidents = (await getJson("/incidents")) || [];
+  const dlq = (await getJson("/dlq")) || [];
+  const top = incidents[0];
 
   return (
-    <main style={{ fontFamily: "system-ui", padding: 32, maxWidth: 1200, margin: "0 auto" }}>
-      <p style={{ fontWeight: 700, color: "#555" }}>Synthetic demo only · No PHI</p>
-      <h1>OpenHIP Command Center</h1>
-      <p>
-        Local-first EHR InterfaceOps platform for HL7/FHIR ingestion, data contracts,
-        dead-letter replay, audit monitoring, observability, and analytics-ready pipelines.
+    <main style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ color: "#8b93a7", fontSize: 13, letterSpacing: 1 }}>
+        SYNTHETIC DATA · NO PHI
+      </div>
+      <h1 style={{ fontSize: 30, margin: "8px 0 4px" }}>OpenHIP Command Center</h1>
+      <p style={{ color: "#aab2c5", maxWidth: 720 }}>
+        Healthcare interface operations: ingest, validate against a data contract,
+        resolve identity, map terminology, and replay anything that fails.
       </p>
 
-      <section style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
-        {Object.entries(summary || {}).map(([k, v]) => (
-          <div key={k} style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}>
-            <div style={{ color: "#666" }}>{k}</div>
-            <div style={{ fontSize: 28, fontWeight: 800 }}>{String(v)}</div>
-          </div>
-        ))}
+      <section style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+        gap: 14, margin: "26px 0" }}>
+        <Card label="Messages" value={summary?.raw_messages ?? "-"} />
+        <Card label="Observations" value={summary?.observations ?? "-"} />
+        <Card label="Open DLQ" value={summary?.dlq_open ?? "-"} />
+        <Card label="Incidents" value={summary?.incidents ?? "-"} />
       </section>
 
-      <h2>Runs</h2>
-      <pre style={{ background: "#f7f7f7", padding: 16, borderRadius: 12, overflow: "auto" }}>
-        {JSON.stringify(runs, null, 2)}
-      </pre>
+      {top && (
+        <section style={{ border: "1px solid #232733", borderRadius: 10, padding: 18,
+          background: "#151823", marginBottom: 26 }}>
+          <h2 style={{ marginTop: 0, fontSize: 18 }}>{top.incident_id}</h2>
+          <p style={{ color: "#aab2c5", margin: "4px 0" }}>
+            {top.primary_failure} · rule {top.failed_rule} · status{" "}
+            <b style={{ color: top.status === "remediated" ? "#5ad19a" : "#e0b341" }}>
+              {top.status}</b>
+          </p>
+          <p style={{ color: "#8b93a7", margin: 0 }}>{top.remediation_summary}</p>
+        </section>
+      )}
 
-      <h2>Incidents</h2>
-      <pre style={{ background: "#f7f7f7", padding: 16, borderRadius: 12, overflow: "auto" }}>
-        {JSON.stringify(incidents, null, 2)}
-      </pre>
-
-      <h2>Failure Queue</h2>
-      <pre style={{ background: "#f7f7f7", padding: 16, borderRadius: 12, overflow: "auto" }}>
-        {JSON.stringify((dlq || []).slice(0, 20), null, 2)}
-      </pre>
-
-      <h2>Quality Checks</h2>
-      <pre style={{ background: "#f7f7f7", padding: 16, borderRadius: 12, overflow: "auto" }}>
-        {JSON.stringify(quality, null, 2)}
-      </pre>
+      <h2 style={{ fontSize: 18 }}>Failure queue</h2>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+        <thead>
+          <tr style={{ textAlign: "left", color: "#8b93a7" }}>
+            <th style={{ padding: 8 }}>Message</th>
+            <th style={{ padding: 8 }}>Category</th>
+            <th style={{ padding: 8 }}>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {dlq.slice(0, 12).map((d: any) => (
+            <tr key={d.dlq_id} style={{ borderTop: "1px solid #232733" }}>
+              <td style={{ padding: 8, fontFamily: "ui-monospace" }}>{d.message_id}</td>
+              <td style={{ padding: 8 }}>{d.failure_category}</td>
+              <td style={{ padding: 8 }}>{d.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </main>
   );
 }

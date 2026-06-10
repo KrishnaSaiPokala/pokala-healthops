@@ -1,14 +1,19 @@
-﻿site_name: OpenHIP Command Center
-site_description: Local-first no-PHI EHR InterfaceOps command center
-site_url: https://krishnasaipokala.github.io/openhip-command-center/
-
+site_name: OpenHIP Command Center
+site_description: No-PHI healthcare interface operations
 theme:
-  name: readthedocs
-
+  name: material
+  palette:
+    scheme: slate
+    primary: teal
+  features:
+    - navigation.sections
+    - content.code.copy
+extra_css:
+  - styles.css
 nav:
-  - Home: index.md
+  - Overview: index.md
   - Architecture: architecture.md
-  - Incident Demo: incident-demo.md
+  - Incident walkthrough: incident-demo.md
+  - Status: status.md
   - Security: security.md
-  - Deployment: deployment.md
-  - Interview Story: interview-story.md
+  - Interview notes: interview.md

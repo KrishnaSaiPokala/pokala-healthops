@@ -1,3 +1,4 @@
-# Kubernetes Lab Mode
+# Kubernetes (scaffold)
 
-v1 documents kind/k3d deployment. Implement after core local demo stabilizes.
+Local kind/k3d manifests are a roadmap item. Docker Compose is the supported
+path today.

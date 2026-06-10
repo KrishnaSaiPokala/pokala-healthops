@@ -3,5 +3,6 @@ WORKDIR /app
 COPY pyproject.toml README.md /app/
 COPY openhip /app/openhip
 COPY apps /app/apps
+COPY contracts /app/contracts
 RUN pip install --upgrade pip && pip install -e ".[dev]"
 EXPOSE 8000

@@ -1,17 +1,8 @@
-# Security and Audit
+# Security and data policy
 
-This is a no-PHI local-first demonstration system.
-
-## Included
-
-- Synthetic data
-- RBAC role model
-- Audit event simulation
-- Keycloak mock
-- Trivy scan scaffold
-
-## Not Claimed
-
-- HIPAA certification
-- Production readiness for PHI
-- Enterprise MPI replacement
+- Synthetic data only. No PHI, no employer data, no hosted uploads.
+- Audit events record who did what to which resource on which run.
+- Roles (viewer, analyst, engineer, admin) are modelled in the audit layer;
+  enforced RBAC on the API is on the roadmap, not claimed as done.
+- This is a demonstration system, not a clinical system or a medical device,
+  and it is not a HIPAA compliance certification.

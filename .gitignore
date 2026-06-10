@@ -1,4 +1,4 @@
-﻿.env
+.env
 .venv/
 __pycache__/
 *.pyc
@@ -7,18 +7,7 @@ __pycache__/
 .ruff_cache/
 node_modules/
 .next/
-dist/
-build/
 openhip.db
 reports/
 site/
 .DS_Store
-
-# Local patch/helper scripts
-patch_replay.py
-harden_openhip.py
-finish_hardening.py
-final_polish.py
-
-# Python packaging artifacts
-*.egg-info/

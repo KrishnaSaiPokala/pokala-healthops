@@ -1,22 +1,24 @@
 SHELL := /bin/bash
 PYTHON ?= python3
 
-.PHONY: bootstrap up down api web demo incident-demo replay-incident verify-warehouse export-incident-report test lint docs clean
+.PHONY: bootstrap check test lint api web demo incident-demo replay-incident \
+        verify-warehouse export-incident-report mpi-demo docs clean
 
 bootstrap:
 	$(PYTHON) -m venv .venv
-	. .venv/bin/activate && pip install --upgrade pip
-	. .venv/bin/activate && pip install -e ".[dev]"
-	@echo "Bootstrap complete. Run: source .venv/bin/activate"
+	. .venv/bin/activate && pip install --upgrade pip && pip install -e ".[dev]"
+	@echo "Done. Run: source .venv/bin/activate"
 
-up:
-	docker compose up --build
+check: lint test
 
-down:
-	docker compose down -v
+lint:
+	. .venv/bin/activate && ruff check . && mypy openhip apps/api
+
+test:
+	. .venv/bin/activate && pytest -q
 
 api:
-	. .venv/bin/activate && uvicorn apps.api.main:app --reload --host 0.0.0.0 --port 8000
+	. .venv/bin/activate && uvicorn apps.api.main:app --reload --port 8000
 
 web:
 	cd apps/web && npm install && npm run dev
@@ -28,19 +30,16 @@ incident-demo:
 	. .venv/bin/activate && python -m openhip.cli incident-demo
 
 replay-incident:
-	. .venv/bin/activate && python -m openhip.cli replay-incident --incident-id INC-20260602-LAB-CODE-FORMAT
+	. .venv/bin/activate && python -m openhip.cli replay-incident
 
 verify-warehouse:
 	. .venv/bin/activate && python -m openhip.cli verify-warehouse
 
 export-incident-report:
-	. .venv/bin/activate && python -m openhip.cli export-incident-report --incident-id INC-20260602-LAB-CODE-FORMAT
+	. .venv/bin/activate && python -m openhip.cli export-incident-report
 
-test:
-	. .venv/bin/activate && pytest -q
-
-lint:
-	. .venv/bin/activate && ruff check . && mypy openhip apps/api
+mpi-demo:
+	. .venv/bin/activate && python -m openhip.cli mpi-demo
 
 docs:
 	. .venv/bin/activate && mkdocs build

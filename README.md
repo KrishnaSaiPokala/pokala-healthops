@@ -1,78 +1,53 @@
 # OpenHIP Command Center
 
-A local-first, no-PHI EHR InterfaceOps platform for HL7/FHIR ingestion,
-data contracts, dead-letter replay, terminology mapping, MPI demonstration,
-observability, audit logging, and analytics-ready healthcare pipelines.
+A local-first, no-PHI control plane for healthcare interface operations. It
+ingests HL7 ORU-style lab feeds, validates them against a versioned data
+contract, resolves patient identity, maps local lab codes to a target code
+system, and routes anything that fails into a dead-letter queue that can be
+inspected, remediated, and replayed. Every record is tied to a `run_id`.
 
-## No-PHI Guardrail
+The repository exists to demonstrate how an interface team detects, triages,
+fixes, replays, and proves recovery of a healthcare integration incident.
 
-This project uses only synthetic/demo data. Do not upload, paste, ingest,
-commit, or process real patient data, employer data, credentials, or secrets.
-
-## Fast Start
+## Run the incident in one minute
 
 ```bash
 make bootstrap
-make incident-demo
-make replay-incident
-make verify-warehouse
-make export-incident-report
-make docs
+source .venv/bin/activate
+make incident-demo            # 500 ORU messages, 218 fail a code-format change
+make replay-incident          # add the missing map, replay, recover all 218
+make verify-warehouse         # three quality checks, all green
+make export-incident-report   # JSON evidence in reports/
 ```
 
-## Full Local Stack
+## What runs today vs. what is planned
 
-```bash
-make up
+This distinction is kept honest on purpose; see `docs/status.md`.
+
+**Implemented:** contract-driven ORU validation, demonstration MPI with
+deterministic + fuzzy tiers, dead-letter queue, replay engine, incident
+lifecycle, audit events, warehouse quality checks, JSON evidence export,
+Prometheus metrics, FastAPI service, a small web dashboard, CI, and tests.
+
+**Optional / off by default:** pushing accepted results to a local HAPI FHIR
+server (set `OPENHIP_FHIR_PUSH=true` with HAPI running).
+
+**Scaffolded, not claimed as working:** dbt models, an Airflow DAG, and
+Kubernetes manifests are included as structure, not as a running platform.
+
+## No-PHI policy
+
+Synthetic data only. Do not ingest, paste, or commit real patient data,
+credentials, or employer data. This is not a clinical system, not a medical
+device, and not a HIPAA compliance certification.
+
+## Layout
+
 ```
-
-Services:
-
-- API: http://localhost:8000/docs
-- Web UI: http://localhost:3000
-- HAPI FHIR: http://localhost:8080/fhir
-- Grafana: http://localhost:3001
-- Keycloak: http://localhost:8083
-- Docs: http://localhost:8001
-
-## Demo Story
-
-Lab ORU feed changes observation code format from `GLU_FAST` to
-`LAB:GLUCOSE_FASTING`. OpenHIP detects terminology mapping failure,
-routes failed messages to DLQ, opens an incident, applies a mapping fix,
-replays failed records, verifies warehouse checks, and exports evidence.
-
-## Core Commands
-
-```bash
-make demo
-make incident-demo
-make replay-incident
-make verify-warehouse
-make export-incident-report
-make test
-make lint
-make docs
+apps/api      FastAPI service
+apps/web      Next.js dashboard
+openhip/      pipeline, contracts, mpi, metrics, fhir, cli
+contracts/    versioned YAML interface contracts
+docs/         MkDocs site published to GitHub Pages
+tests/        pytest suite mirrored by CI
 ```
-
-
-## Windows / PyCharm Terminal Workflow
-
-    cd C:\Users\Event\PycharmProjects\HAPI-FHOR-KSP\openhip-command-center
-    .\scripts\windows_smoke.ps1
-
-## Public Documentation Target
-
-    https://KrishnaSaiPokala.github.io/openhip-command-center/
-
-## Current Verified Core Flow
-
-- Synthetic ORU ingestion
-- Terminology mapping failure
-- DLQ creation
-- Incident creation
-- Mapping remediation
-- DLQ replay
-- Warehouse-quality verification
-- Incident evidence export
-- MkDocs documentation build

@@ -1,4 +1,5 @@
 import json
+
 import typer
 from rich import print
 
@@ -6,12 +7,13 @@ from openhip.pipeline import (
     demo_run,
     export_incident_report,
     incident_demo,
+    mpi_demo,
     replay_incident,
     summarize,
     verify_warehouse,
 )
 
-app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(no_args_is_help=True, add_completion=False)
 
 
 @app.command("demo")
@@ -36,8 +38,12 @@ def verify() -> None:
 
 @app.command("export-incident-report")
 def export(incident_id: str = typer.Option("INC-20260602-LAB-CODE-FORMAT")) -> None:
-    path = export_incident_report(incident_id)
-    print(f"[green]Exported[/green] {path}")
+    print(f"[green]Exported[/green] {export_incident_report(incident_id)}")
+
+
+@app.command("mpi-demo")
+def mpi() -> None:
+    print(json.dumps(mpi_demo(), indent=2))
 
 
 @app.command("summary")

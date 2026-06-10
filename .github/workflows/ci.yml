@@ -2,21 +2,50 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  test:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install --upgrade pip
       - run: pip install -e ".[dev]"
       - run: ruff check .
-      - run: python -m openhip.cli incident-demo
-      - run: python -m openhip.cli replay-incident --incident-id INC-20260602-LAB-CODE-FORMAT
-      - run: python -m openhip.cli verify-warehouse
+      - run: mypy openhip apps/api
       - run: pytest -q
+      - run: python -m openhip.cli incident-demo
+      - run: python -m openhip.cli replay-incident
+      - run: python -m openhip.cli verify-warehouse
+
+  docs:
+    needs: quality
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install mkdocs-material
       - run: mkdocs build --strict
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4

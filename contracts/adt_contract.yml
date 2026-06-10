@@ -1,6 +1,5 @@
 interface: adt_feed
 version: "1.0"
-message_family: HL7v2-style
 message_type: ADT
 required_fields:
   - patient_mrn

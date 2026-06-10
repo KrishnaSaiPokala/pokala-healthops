@@ -1,12 +1,9 @@
-from datetime import UTC, datetime
-from sqlalchemy import Boolean, DateTime, Float, Integer, String, Text
+from datetime import datetime
+
+from sqlalchemy import DateTime, Float, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from openhip.db import Base
-
-
-def utc_now() -> datetime:
-    return datetime.now(UTC)
 
 
 class IntegrationRun(Base):
@@ -16,7 +13,7 @@ class IntegrationRun(Base):
     run_id: Mapped[str] = mapped_column(String, unique=True, index=True)
     source_interface: Mapped[str] = mapped_column(String)
     source_type: Mapped[str] = mapped_column(String)
-    started_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
+    started_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     status: Mapped[str] = mapped_column(String, default="running")
     inbound_count: Mapped[int] = mapped_column(Integer, default=0)
@@ -34,11 +31,10 @@ class RawMessage(Base):
     run_id: Mapped[str] = mapped_column(String, index=True)
     message_id: Mapped[str] = mapped_column(String, unique=True, index=True)
     interface_name: Mapped[str] = mapped_column(String)
-    source_type: Mapped[str] = mapped_column(String)
     payload: Mapped[str] = mapped_column(Text)
     status: Mapped[str] = mapped_column(String, default="inbound")
     trace_id: Mapped[str] = mapped_column(String)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
 class Patient(Base):
@@ -50,8 +46,6 @@ class Patient(Base):
     name: Mapped[str] = mapped_column(String)
     dob: Mapped[str] = mapped_column(String)
     zip3: Mapped[str] = mapped_column(String, default="000")
-    match_type: Mapped[str] = mapped_column(String, default="exact_match")
-    match_confidence: Mapped[float] = mapped_column(Float, default=1.0)
 
 
 class Encounter(Base):
@@ -60,7 +54,6 @@ class Encounter(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     encounter_id: Mapped[str] = mapped_column(String, unique=True)
     patient_id: Mapped[str] = mapped_column(String, index=True)
-    encounter_type: Mapped[str] = mapped_column(String, default="outpatient")
     status: Mapped[str] = mapped_column(String, default="active")
 
 
@@ -75,7 +68,6 @@ class TerminologyMap(Base):
     target_code: Mapped[str] = mapped_column(String)
     target_display: Mapped[str] = mapped_column(String)
     map_status: Mapped[str] = mapped_column(String, default="active")
-    confidence: Mapped[float] = mapped_column(Float, default=0.98)
     version: Mapped[str] = mapped_column(String, default="lab_map_v1")
     updated_by: Mapped[str] = mapped_column(String, default="demo_analyst")
 
@@ -96,8 +88,8 @@ class Observation(Base):
     unit: Mapped[str] = mapped_column(String)
     abnormal_flag: Mapped[str] = mapped_column(String, default="N")
     observation_datetime: Mapped[str] = mapped_column(String)
-    mapping_status: Mapped[str] = mapped_column(String, default="mapped")
-    validation_status: Mapped[str] = mapped_column(String, default="accepted")
+    match_type: Mapped[str] = mapped_column(String, default="exact_match")
+    match_confidence: Mapped[float] = mapped_column(Float, default=1.0)
 
 
 class DeadLetterMessage(Base):
@@ -133,7 +125,7 @@ class Incident(Base):
     failed_rule: Mapped[str] = mapped_column(String)
     failed_messages: Mapped[int] = mapped_column(Integer, default=0)
     status: Mapped[str] = mapped_column(String, default="open")
-    opened_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
+    opened_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     closed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     remediation_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
 
@@ -143,15 +135,13 @@ class AuditEvent(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     audit_event_id: Mapped[str] = mapped_column(String, unique=True)
-    event_timestamp: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
+    event_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     actor_id: Mapped[str] = mapped_column(String)
     role: Mapped[str] = mapped_column(String)
     action: Mapped[str] = mapped_column(String)
     resource_type: Mapped[str] = mapped_column(String)
     resource_id: Mapped[str] = mapped_column(String)
     outcome: Mapped[str] = mapped_column(String)
-    risk_score: Mapped[float] = mapped_column(Float, default=0.1)
-    anomaly_flag: Mapped[bool] = mapped_column(Boolean, default=False)
     run_id: Mapped[str] = mapped_column(String)
     trace_id: Mapped[str] = mapped_column(String)
 
