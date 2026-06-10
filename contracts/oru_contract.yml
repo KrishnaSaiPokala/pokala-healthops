@@ -1,0 +1,38 @@
+interface: lab_oru_feed
+version: "1.0"
+message_family: HL7v2-style
+message_type: ORU
+owner: InterfaceOps demo
+required_fields:
+  - patient_mrn
+  - patient_dob
+  - encounter_id
+  - observation_code
+  - observation_value
+  - observation_unit
+  - observation_datetime
+  - ordering_provider_id
+field_rules:
+  patient_mrn:
+    type: string
+    min_length: 3
+    resolves_to: mpi.synthetic_patient
+  observation_datetime:
+    type: datetime
+    cannot_be_future: true
+  observation_code:
+    type: string
+    mapping_required: terminology.lab_code_map
+  observation_value:
+    type: decimal
+    nullable: false
+sla:
+  max_reject_rate: 0.02
+  max_processing_latency_seconds: 30
+  max_warehouse_freshness_minutes: 15
+affected_assets:
+  - raw_lab_result
+  - stg_observation
+  - fact_observation
+  - fhir_observation_bundle
+  - lab_operations_dashboard

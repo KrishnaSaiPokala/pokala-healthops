@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: openhip
+      POSTGRES_PASSWORD: openhip
+      POSTGRES_DB: openhip
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  hapi-fhir:
+    image: hapiproject/hapi:latest
+    ports:
+      - "8080:8080"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8083:8080"
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    environment:
+      OPENHIP_DB_URL: sqlite:///./openhip.db
+      OPENHIP_NO_PHI: "true"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: uvicorn apps.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  web:
+    image: node:22-alpine
+    working_dir: /app/apps/web
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && npm run dev"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+
+volumes:
+  pgdata:
+  grafana:

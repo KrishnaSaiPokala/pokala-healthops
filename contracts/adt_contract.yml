@@ -1,0 +1,11 @@
+interface: adt_feed
+version: "1.0"
+message_family: HL7v2-style
+message_type: ADT
+required_fields:
+  - patient_mrn
+  - patient_name
+  - patient_dob
+  - encounter_id
+  - event_type
+  - event_datetime

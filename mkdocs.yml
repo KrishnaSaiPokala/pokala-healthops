@@ -1,0 +1,10 @@
+site_name: OpenHIP Command Center
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Incident Demo: incident-demo.md
+  - Security: security.md
+  - Deployment: deployment.md
+  - Interview Story: interview-story.md
