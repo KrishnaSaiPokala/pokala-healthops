@@ -1,6 +1,10 @@
-site_name: OpenHIP Command Center
+﻿site_name: OpenHIP Command Center
+site_description: Local-first no-PHI EHR InterfaceOps command center
+site_url: https://krishnasaipokala.github.io/openhip-command-center/
+
 theme:
-  name: material
+  name: readthedocs
+
 nav:
   - Home: index.md
   - Architecture: architecture.md
