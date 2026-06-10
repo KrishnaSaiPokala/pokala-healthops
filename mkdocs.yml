@@ -16,4 +16,4 @@ nav:
   - Incident walkthrough: incident-demo.md
   - Status: status.md
   - Security: security.md
-  - Interview notes: interview.md
+  - Design notes: decisions.md
