@@ -16,7 +16,7 @@
 
 ## What This Demonstrates
 
-Pokala HealthOps is built to demonstrate senior-level work across healthcare interoperability, backend systems, data reliability, observability, and incident response.
+Pokala HealthOps demonstrates senior-level work across healthcare interoperability, backend systems, data reliability, observability, and incident response.
 
 - Contract-driven ingestion for synthetic clinical messages
 - Terminology mapping failure detection
@@ -27,7 +27,7 @@ Pokala HealthOps is built to demonstrate senior-level work across healthcare int
 
 ## Flagship Incident
 
-The demo simulates a lab interface changing fasting glucose from `GLU_FAST` to `LAB:GLUCOSE_FASTING`. The platform detects the unmapped code, isolates the failed messages, opens an incident, applies a terminology fix, replays the failures, and verifies that the warehouse recovered correctly.
+The demo simulates a lab interface changing fasting glucose from GLU_FAST to LAB:GLUCOSE_FASTING. The platform detects the unmapped code, isolates failed messages, opens an incident, applies a terminology fix, replays failures, and verifies warehouse recovery.
 
 ## Run the Demo
 
@@ -37,7 +37,7 @@ The demo simulates a lab interface changing fasting glucose from `GLU_FAST` to `
 
 ## Positioning
 
-This project is designed for Health IT Engineer, Interface Engineer, Interoperability Engineer, Healthcare Data Engineer, Backend Engineer, Platform Engineer, and Solutions Engineer roles.
+Designed for Health IT Engineer, Interface Engineer, Interoperability Engineer, Healthcare Data Engineer, Backend Engineer, Platform Engineer, and Solutions Engineer roles.
 
 ## Guardrail
 

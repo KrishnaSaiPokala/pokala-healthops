@@ -1,15 +1,12 @@
-export const metadata = {
+﻿export const metadata = {
   title: "Pokala HealthOps",
-  description: "No-PHI healthcare interface operations",
+  description: "Healthcare Interface Operations Platform"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, background: "#0f1115", color: "#e7e9ee",
-        fontFamily: "ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto" }}>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
