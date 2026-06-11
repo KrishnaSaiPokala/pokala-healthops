@@ -1,4 +1,6 @@
-﻿export const metadata = {
+﻿import "./globals.css";
+
+export const metadata = {
   title: "Pokala HealthOps",
   description: "Healthcare Interface Operations Platform"
 };
