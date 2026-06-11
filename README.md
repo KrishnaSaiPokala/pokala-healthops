@@ -73,3 +73,4 @@ Final verified state:
 ## Portfolio Signal
 
 Pokala HealthOps is positioned for roles such as Health IT Engineer, Interface Engineer, Interoperability Engineer, Healthcare Data Engineer, Backend Engineer, Platform Engineer, and Solutions Engineer.
+
