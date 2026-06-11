@@ -1,4 +1,4 @@
-﻿site_name: Pokala HealthOps
+site_name: Pokala HealthOps
 site_description: Healthcare Interface Operations Platform
 site_url: https://krishnasaipokala.github.io/openhip-command-center/
 repo_url: https://github.com/KrishnaSaiPokala/openhip-command-center
@@ -10,11 +10,12 @@ theme:
     - navigation.sections
     - navigation.top
     - content.code.copy
+extra_css:
+  - styles.css
 nav:
   - Home: index.md
   - Architecture: architecture.md
   - Incident Demo: incident-demo.md
+  - Status: status.md
   - Security: security.md
-  - Interview Story: interview-story.md
-extra_css:
-  - styles.css
+  - Interview Story: interview.md
