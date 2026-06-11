@@ -30,7 +30,7 @@ export default async function Page() {
       <div style={{ color: "#8b93a7", fontSize: 13, letterSpacing: 1 }}>
         SYNTHETIC DATA · NO PHI
       </div>
-      <h1 style={{ fontSize: 30, margin: "8px 0 4px" }}>OpenHIP Command Center</h1>
+      <h1 style={{ fontSize: 30, margin: "8px 0 4px" }}>Pokala HealthOps</h1>
       <p style={{ color: "#aab2c5", maxWidth: 720 }}>
         Healthcare interface operations: ingest, validate against a data contract,
         resolve identity, map terminology, and replay anything that fails.

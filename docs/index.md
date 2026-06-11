@@ -1,36 +1,44 @@
-# OpenHIP Command Center
+﻿<section class="hero">
+<p class="eyebrow">Synthetic healthcare operations platform · No PHI</p>
+<h1>Pokala HealthOps</h1>
+<p class="lead"><strong>Healthcare Interface Operations Platform</strong> for detecting, triaging, replaying, verifying, and auditing clinical data pipeline failures.</p>
+<p><span class="pill">HL7-style ORU ingest</span><span class="pill">FHIR-oriented mapping</span><span class="pill">DLQ + replay</span><span class="pill">Warehouse verification</span><span class="pill">Audit evidence</span></p>
+</section>
 
-A local-first control plane for healthcare interface operations. It receives an
-HL7 ORU-style lab feed, checks each message against a versioned data contract,
-resolves patient identity, maps the local lab code to a target code, and sends
-anything that fails into a dead-letter queue that can be replayed once the
-underlying problem is fixed.
+## Executive Snapshot
 
-Everything here runs on synthetic data. There is no PHI, no employer data, and
-nothing hosted that accepts uploads.
+<div class="grid">
+<div class="card"><div class="label">Inbound messages</div><div class="metric">500</div><p>Synthetic ORU-style lab feed.</p></div>
+<div class="card"><div class="label">Detected failures</div><div class="metric">218</div><p>Terminology mapping failures routed to DLQ.</p></div>
+<div class="card"><div class="label">Recovered</div><div class="metric">218</div><p>Recovered after map remediation and replay.</p></div>
+<div class="card"><div class="label">Quality checks</div><div class="metric">3/3</div><p>Warehouse verification passed after replay.</p></div>
+</div>
 
-## The incident this project is built around
+## What This Demonstrates
 
-A lab system changes its fasting-glucose code from `GLU_FAST` to
-`LAB:GLUCOSE_FASTING`. The new code is not in the active map, so those results
-stop loading. OpenHIP catches it at the contract boundary instead of letting it
-fail silently downstream.
+Pokala HealthOps is built to demonstrate senior-level work across healthcare interoperability, backend systems, data reliability, observability, and incident response.
 
-| Step | Result |
-| --- | --- |
-| ORU messages ingested | 500 |
-| Rejected on the code change | 218 |
-| Routed to dead-letter queue | 218 |
-| Recovered after the map fix + replay | 218 |
-| Open dead-letters afterwards | 0 |
-| Warehouse checks passing | 3 / 3 |
+- Contract-driven ingestion for synthetic clinical messages
+- Terminology mapping failure detection
+- Dead-letter queue routing and replay
+- Incident lifecycle and remediation tracking
+- Warehouse quality verification
+- Operational metrics and audit evidence
 
-## Run it
+## Flagship Incident
 
-```bash
-make bootstrap && source .venv/bin/activate
-make incident-demo
-make replay-incident
-make verify-warehouse
-make export-incident-report
-```
+The demo simulates a lab interface changing fasting glucose from `GLU_FAST` to `LAB:GLUCOSE_FASTING`. The platform detects the unmapped code, isolates the failed messages, opens an incident, applies a terminology fix, replays the failures, and verifies that the warehouse recovered correctly.
+
+## Run the Demo
+
+    python -m openhip.cli incident-demo
+    python -m openhip.cli replay-incident
+    python -m openhip.cli verify-warehouse
+
+## Positioning
+
+This project is designed for Health IT Engineer, Interface Engineer, Interoperability Engineer, Healthcare Data Engineer, Backend Engineer, Platform Engineer, and Solutions Engineer roles.
+
+## Guardrail
+
+Synthetic data only. No PHI. No HIPAA certification claim. No production EHR claim.

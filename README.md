@@ -1,53 +1,75 @@
-# OpenHIP Command Center
+﻿# Pokala HealthOps
 
-A local-first, no-PHI control plane for healthcare interface operations. It
-ingests HL7 ORU-style lab feeds, validates them against a versioned data
-contract, resolves patient identity, maps local lab codes to a target code
-system, and routes anything that fails into a dead-letter queue that can be
-inspected, remediated, and replayed. Every record is tied to a `run_id`.
+**Healthcare Interface Operations Platform**
 
-The repository exists to demonstrate how an interface team detects, triages,
-fixes, replays, and proves recovery of a healthcare integration incident.
+Detect. Triage. Replay. Verify. Audit.
 
-## Run the incident in one minute
+Pokala HealthOps is a no-PHI healthcare interface operations platform built to demonstrate production-style clinical data reliability workflows. It shows how healthcare integration teams manage interface failures from detection through recovery using synthetic data, contract validation, terminology mapping, dead-letter routing, incident remediation, replay, warehouse verification, observability, and audit evidence.
 
-```bash
-make bootstrap
-source .venv/bin/activate
-make incident-demo            # 500 ORU messages, 218 fail a code-format change
-make replay-incident          # add the missing map, replay, recover all 218
-make verify-warehouse         # three quality checks, all green
-make export-incident-report   # JSON evidence in reports/
-```
+## Why This Project Exists
 
-## What runs today vs. what is planned
+Healthcare interfaces fail in ways that are operationally expensive: lab code changes, malformed messages, missing mappings, patient identity mismatches, stale warehouse data, and unreplayed dead-letter queues. Pokala HealthOps turns that problem into a complete engineering demonstration.
 
-This distinction is kept honest on purpose; see `docs/status.md`.
+This project is designed to show senior-level capability across:
 
-**Implemented:** contract-driven ORU validation, demonstration MPI with
-deterministic + fuzzy tiers, dead-letter queue, replay engine, incident
-lifecycle, audit events, warehouse quality checks, JSON evidence export,
-Prometheus metrics, FastAPI service, a small web dashboard, CI, and tests.
+- Health IT engineering
+- Healthcare interoperability
+- Interface operations
+- Backend engineering
+- Data platform engineering
+- Observability and audit
+- Incident response workflows
 
-**Optional / off by default:** pushing accepted results to a local HAPI FHIR
-server (set `OPENHIP_FHIR_PUSH=true` with HAPI running).
+## No-PHI Guardrail
 
-**Scaffolded, not claimed as working:** dbt models, an Airflow DAG, and
-Kubernetes manifests are included as structure, not as a running platform.
+This project uses only synthetic demo data. Do not upload, paste, ingest, commit, or process real patient data, employer data, credentials, or secrets.
 
-## No-PHI policy
+This project does not claim HIPAA certification, production clinical deployment readiness, enterprise MPI replacement, or real EHR integration.
 
-Synthetic data only. Do not ingest, paste, or commit real patient data,
-credentials, or employer data. This is not a clinical system, not a medical
-device, and not a HIPAA compliance certification.
+## Flagship Incident Demo
 
-## Layout
+A lab feed changes fasting glucose from `GLU_FAST` to `LAB:GLUCOSE_FASTING`.
 
-```
-apps/api      FastAPI service
-apps/web      Next.js dashboard
-openhip/      pipeline, contracts, mpi, metrics, fhir, cli
-contracts/    versioned YAML interface contracts
-docs/         MkDocs site published to GitHub Pages
-tests/        pytest suite mirrored by CI
-```
+Pokala HealthOps:
+
+1. Ingests 500 synthetic ORU-style lab messages.
+2. Detects 218 terminology mapping failures.
+3. Routes failed messages to the dead-letter queue.
+4. Opens an operational incident.
+5. Applies a terminology map fix.
+6. Replays the failed records.
+7. Verifies warehouse recovery.
+8. Produces audit and evidence artifacts.
+
+Final verified state:
+
+| Metric | Value |
+|---|---:|
+| Synthetic inbound messages | 500 |
+| Initial terminology failures | 218 |
+| Recovered after replay | 218 |
+| Final observations | 500 |
+| Open DLQ after replay | 0 |
+| Warehouse checks | 3/3 passed |
+
+## Fast Start
+
+    python -m openhip.cli incident-demo
+    python -m openhip.cli replay-incident
+    python -m openhip.cli verify-warehouse
+    python -m openhip.cli export-incident-report
+    python -m mkdocs serve
+
+## Core System Areas
+
+- `openhip/pipeline.py` - ingestion, validation, DLQ, remediation, replay, verification
+- `apps/api` - FastAPI operational API
+- `apps/web` - dashboard scaffold
+- `contracts` - interface contract definitions
+- `docs` - public GitHub Pages site
+- `reports` - generated incident evidence
+- `tests` - automated regression checks
+
+## Portfolio Signal
+
+Pokala HealthOps is positioned for roles such as Health IT Engineer, Interface Engineer, Interoperability Engineer, Healthcare Data Engineer, Backend Engineer, Platform Engineer, and Solutions Engineer.

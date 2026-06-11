@@ -1,26 +1,19 @@
-﻿site_name: OpenHIP Command Center
-site_description: No-PHI healthcare interface operations
-site_url: https://krishnasaipokala.github.io/openhip-command-center/
+﻿site_name: Pokala HealthOps
+site_description: Healthcare Interface Operations Platform
 repo_url: https://github.com/KrishnaSaiPokala/openhip-command-center
 repo_name: KrishnaSaiPokala/openhip-command-center
-copyright: Built by Krishna Sai Pokala · Synthetic data only · No PHI
-
 theme:
   name: material
-  palette:
-    scheme: slate
-    primary: teal
   features:
+    - navigation.tabs
     - navigation.sections
+    - navigation.top
     - content.code.copy
-
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Incident Demo: incident-demo.md
+  - Security: security.md
+  - Interview Story: interview-story.md
 extra_css:
   - styles.css
-
-nav:
-  - Overview: index.md
-  - Architecture: architecture.md
-  - Incident walkthrough: incident-demo.md
-  - Status: status.md
-  - Security: security.md
-  - Design notes: interview.md

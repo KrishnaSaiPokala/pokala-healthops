@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "OpenHIP Command Center",
+  title: "Pokala HealthOps",
   description: "No-PHI healthcare interface operations",
 };
 

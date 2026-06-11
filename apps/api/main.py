@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="OpenHIP Command Center API", version="0.9.0", lifespan=lifespan)
+app = FastAPI(title="Pokala HealthOps API", version="0.9.0", lifespan=lifespan)
 
 
 @app.get("/health")
