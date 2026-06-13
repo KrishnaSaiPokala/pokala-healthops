@@ -16,3 +16,22 @@ pokala_healthops_hardening_patch/
 pokala_healthops_staff_chunk/
 APPLY.md
 APPLY-*.ps1
+
+# Local dbt/runtime environments
+.venv-dbt/
+
+# Frontend build artifacts
+apps/web/out/
+apps/web/.next/
+apps/web/tsconfig.tsbuildinfo
+
+# Patch/archive artifacts
+*.zip
+.platform-site-upgrade/
+pokala_healthops_ultra_site_fix*.ps1
+APPLY.ps1
+TERMINAL_COMMANDS.ps1
+README_PATCH.md
+
+# Local tool caches
+.cache/
