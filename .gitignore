@@ -11,3 +11,7 @@ openhip.db
 reports/
 site/
 .DS_Store
+
+*.egg-info/
+pokala_healthops_hardening_patch/
+APPLY.md
