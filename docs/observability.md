@@ -1,43 +1,47 @@
 # Observability
 
-The current metrics endpoint is a basic proof. The hardening target is an operational metric set that explains volume, failure type, replay behavior, DLQ state, and verification state.
+The project exposes operational state through the database, API endpoints, evidence files, and Prometheus-formatted metrics.
 
-## Current metric intent
+## Current signals
 
-| Signal | Meaning |
+| Signal | Source |
 | --- | --- |
-| Inbound messages | Interface volume |
-| Accepted observations | Successful processing |
-| Rejected messages | Contract or mapping failures |
-| Open DLQ | Unresolved operational work |
-| Reject rate | Interface health signal |
+| inbound count | `IntegrationRun.inbound_count` |
+| accepted count | `IntegrationRun.accepted_count` |
+| rejected count | `IntegrationRun.rejected_count` |
+| open DLQ | `DeadLetterMessage.status = open` |
+| replayed DLQ | `DeadLetterMessage.status = replayed_accepted` |
+| incident status | `Incident.status` |
+| warehouse checks | `QualityCheck` |
+| audit actions | `AuditEvent.action` |
 
-## Target metric set
+## Reliability invariant report
+
+Run:
+
+```bash
+python -m openhip.cli verify-replay-invariants
+```
+
+The command writes:
+
+```text
+evidence/replay-invariants.json
+```
+
+The report is useful because it checks the actual database state after replay instead of trusting console output.
+
+## Metrics roadmap
+
+The current metrics endpoint is intentionally small. The next production-style increment is label-based counters and histograms:
 
 ```text
 openhip_interface_messages_total{interface,status}
 openhip_contract_violations_total{rule_id,category}
 openhip_dlq_open_total{category}
-openhip_replay_attempts_total{status}
 openhip_replay_records_total{status}
 openhip_incidents_total{status}
-openhip_mpi_matches_total{tier}
 openhip_warehouse_checks_total{check,status}
-openhip_evidence_exports_total{status}
-openhip_ingest_duration_seconds
-openhip_replay_duration_seconds
-openhip_dlq_age_seconds
 ```
 
-## Alert examples
-
-| Condition | Meaning |
-| --- | --- |
-| Reject rate above contract SLA | Interface may have changed format or code system |
-| Open DLQ above zero after replay | Recovery incomplete |
-| Replay failures above zero | Remediation did not cover all failed records |
-| Warehouse check failure | Recovery is not proven |
-
-## Evidence rule
-
-A metrics sample should be committed under `evidence/metrics-sample.prom` and regenerated after the demo when possible.
+Those should be added only when backed by tests.

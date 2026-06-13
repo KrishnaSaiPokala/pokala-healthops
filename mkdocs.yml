@@ -33,6 +33,7 @@ nav:
   - Evidence: evidence.md
   - Contracts: contracts.md
   - Observability: observability.md
+  - Public Data: public-data.md
   - Data Strategy: data-strategy.md
   - Security: security.md
   - Run Locally: run-locally.md

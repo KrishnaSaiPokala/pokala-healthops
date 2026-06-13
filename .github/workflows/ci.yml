@@ -1,8 +1,8 @@
-name: CI
+name: ci
 
 on:
   push:
-    branches: [main]
+    branches: ["main", "hardening/**"]
   pull_request:
 
 permissions:
@@ -10,57 +10,77 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - run: pip install -e ".[dev]"
-      - run: ruff check .
-      - run: mypy openhip apps/api
-      - run: pytest -q
-      - run: python -m openhip.cli incident-demo
-      - run: python -m openhip.cli replay-incident
-      - run: python -m openhip.cli verify-warehouse
-      - run: python -m openhip.cli export-incident-report
+          python-version: "3.11"
 
-  frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+      - name: Install Python package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Type check
+        run: mypy openhip apps/api
+
+      - name: Test
+        run: pytest -q
+
+      - name: Demo and evidence checks
+        run: |
+          python -m openhip.cli incident-demo
+          python -m openhip.cli replay-incident
+          python -m openhip.cli verify-warehouse
+          python -m openhip.cli verify-replay-invariants
+          python -m openhip.cli export-incident-report
+
+      - name: Build docs
+        run: mkdocs build --strict
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - working-directory: apps/web
-        run: npm install
-      - working-directory: apps/web
-        run: npm run typecheck
-      - working-directory: apps/web
-        run: npm run build
 
-  docs:
-    needs: [quality, frontend]
+      - name: Build web
+        working-directory: apps/web
+        run: |
+          npm install
+          npm run typecheck
+          npm run build
+
+  pages:
+    needs: quality
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - run: pip install mkdocs-material
-      - run: mkdocs build --strict
+          python-version: "3.11"
+
+      - name: Install docs dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Build docs
+        run: mkdocs build --strict
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
-      - id: deploy
+
+      - id: deployment
         uses: actions/deploy-pages@v4

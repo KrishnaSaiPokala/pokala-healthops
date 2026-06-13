@@ -1,0 +1,4 @@
+provider_id,display_name,specialty,state,source
+PRAC-0001,Demo Reference Lab Physician,Pathology,MD,synthetic_sample
+PRAC-0002,Demo Endocrinology Reviewer,Endocrinology,VA,synthetic_sample
+PRAC-0003,Demo Primary Care Reviewer,Family Medicine,DC,synthetic_sample
