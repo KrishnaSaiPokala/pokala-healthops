@@ -34,7 +34,7 @@ Measured demo outcome:
 | Incident report export | Implemented |
 | FastAPI operational endpoints | Implemented |
 | Prometheus metrics endpoint | Implemented, basic |
-| Next.js command center | Visual MVP, static evidence backed after hardening patch |
+| Next.js command center | Static evidence-backed MVP |
 | FHIR push to local HAPI | Optional, off by default |
 | dbt, Airflow, Kubernetes | Scaffold or roadmap, not claimed as running |
 | Real PHI, production EHR use, HIPAA certification | Out of scope |
