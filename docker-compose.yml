@@ -1,21 +1,57 @@
 services:
-  api:
-    build: { context: ., dockerfile: infra/api.Dockerfile }
+  postgres:
+    image: postgres:17-alpine
+    container_name: healthops-postgres
     environment:
-      OPENHIP_DB_URL: sqlite:///./openhip.db
-    ports: ["8000:8000"]
-    volumes: ["./:/app"]
-    command: uvicorn apps.api.main:app --host 0.0.0.0 --port 8000
+      POSTGRES_DB: healthops
+      POSTGRES_USER: healthops
+      POSTGRES_PASSWORD: healthops_local_only
+    ports:
+      - "5432:5432"
+    volumes:
+      - healthops-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U healthops -d healthops"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  hapi-fhir:
-    image: hapiproject/hapi:latest
-    ports: ["8080:8080"]
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: healthops-api
+    environment:
+      HEALTHOPS_ENV: local
+      HEALTHOPS_DATABASE_URL: sqlite:///./healthops.db
+      OTEL_SERVICE_NAME: healthops-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   web:
-    image: node:22-alpine
-    working_dir: /app/apps/web
-    volumes: ["./:/app"]
-    ports: ["3000:3000"]
-    command: sh -c "npm install && npm run dev"
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: healthops-web
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: healthops-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - api
+
+volumes:
+  healthops-postgres:

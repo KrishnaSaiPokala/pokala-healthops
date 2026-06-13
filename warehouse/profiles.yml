@@ -1,0 +1,7 @@
+healthops_warehouse:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: target/healthops.duckdb
+      threads: 1

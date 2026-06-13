@@ -1,0 +1,2 @@
+incident_id,recovery_state,inbound_messages,failed_messages,replayed_messages,open_dlq,warehouse_checks_passed,duplicate_observations
+INC-20260602-LAB-CODE-FORMAT,remediated,500,218,218,0,3,0

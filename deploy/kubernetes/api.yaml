@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthops-api
+  namespace: healthops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: healthops-api
+  template:
+    metadata:
+      labels:
+        app: healthops-api
+    spec:
+      containers:
+        - name: api
+          image: healthops-api:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: HEALTHOPS_ENV
+              value: "local"
+            - name: HEALTHOPS_DATABASE_URL
+              value: "sqlite:///./healthops.db"
+            - name: OTEL_SERVICE_NAME
+              value: "healthops-api"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: healthops-api
+  namespace: healthops
+spec:
+  selector:
+    app: healthops-api
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30081
+  type: NodePort
