@@ -1,118 +1,104 @@
 # Pokala HealthOps
 
-Pokala HealthOps is a local-first, no-PHI healthcare interface reliability demo. It proves a controlled lab interface incident from ingest through dead-letter triage, terminology remediation, replay, warehouse verification, and evidence export.
+Local-first, no-PHI healthcare interface reliability demo.
 
-Live site: https://krishnasaipokala.github.io/pokala-healthops/
+Pokala HealthOps proves one operational workflow end to end: a lab interface changes an observation code, messages fail contract/terminology checks, failures route to a dead-letter queue, a terminology fix is applied, failed messages are replayed, warehouse checks verify recovery, and evidence is exported.
 
-Repository: https://github.com/KrishnaSaiPokala/pokala-healthops
-
-## What this project proves
-
-A synthetic ORU-style lab feed changes fasting glucose from `GLU_FAST` to `LAB:GLUCOSE_FASTING`. The new code is not in the active terminology map. Pokala HealthOps rejects the affected messages at the contract and mapping boundary, routes them to a dead-letter queue, opens an incident, applies a terminology fix, replays the failed records, verifies warehouse recovery, and exports an evidence package.
-
-Measured demo outcome:
-
-| Signal | Value |
-| --- | ---: |
-| Inbound ORU messages | 500 |
-| Terminology failures | 218 |
-| Accepted before replay | 282 |
-| Recovered by replay | 218 |
-| Final observations | 500 |
-| Open DLQ after replay | 0 |
-| Warehouse checks | 3 of 3 passed |
-
-## Current status
+## What runs
 
 | Capability | Status |
 | --- | --- |
-| ORU-style synthetic lab incident | Implemented |
-| YAML contract required-field and timestamp checks | Implemented |
-| Terminology mapping miss to DLQ | Implemented |
-| Incident creation and replay | Implemented |
-| Warehouse verification checks | Implemented |
-| Incident report export | Implemented |
-| FastAPI operational endpoints | Implemented |
-| Prometheus metrics endpoint | Implemented, basic |
-| Next.js command center | Static evidence-backed MVP |
-| FHIR push to local HAPI | Optional, off by default |
-| dbt, Airflow, Kubernetes | Scaffold or roadmap, not claimed as running |
-| Real PHI, production EHR use, HIPAA certification | Out of scope |
+| ORU-style synthetic lab ingest | Implemented |
+| YAML contract validation | Implemented |
+| Terminology mapping failure | Implemented |
+| DLQ routing | Implemented |
+| Incident creation | Implemented |
+| Replay after terminology fix | Implemented |
+| Warehouse verification | Implemented |
+| Audit events | Implemented |
+| Evidence export | Implemented |
+| Replay invariant checks | Implemented |
+| Public-reference provider enrichment sample | Implemented |
+| FastAPI summary and operations endpoints | Implemented |
+| Static evidence-backed Next.js dashboard | Implemented |
+| FHIR push | Optional, local only, off by default |
+| dbt / Airflow / Kubernetes | Roadmap or scaffold, not claimed as running production features |
 
-See [STATUS.md](STATUS.md) for the detailed implemented versus roadmap table.
+## Flagship incident
 
-## Local run
+`GLU_FAST` changes to `LAB:GLUCOSE_FASTING`.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
+| Metric | Value |
+| --- | ---: |
+| inbound ORU messages | 500 |
+| terminology failures | 218 |
+| accepted before replay | 282 |
+| recovered by replay | 218 |
+| final observations | 500 |
+| open DLQ after replay | 0 |
+| warehouse checks | 3 / 3 passed |
+
+## Local verification
+
+Windows PowerShell:
+
+```powershell
+python -m pip install -e ".[dev]"
+
+ruff check .
+mypy openhip apps/api
+pytest -q
 
 python -m openhip.cli incident-demo
 python -m openhip.cli replay-incident
 python -m openhip.cli verify-warehouse
+python -m openhip.cli verify-replay-invariants
 python -m openhip.cli export-incident-report
-```
 
-Or through Make:
-
-```bash
-make bootstrap
-make incident-demo
-make replay-incident
-make verify-warehouse
-make export-incident-report
-make docs
-```
-
-Frontend:
-
-```bash
-cd apps/web
+mkdocs build --strict
+cd apps\web
 npm install
 npm run typecheck
 npm run build
 ```
 
-## Architecture
+Linux/macOS:
 
-```text
-ORU feed
-  -> contract validation
-  -> terminology mapping
-  -> demonstration MPI
-  -> accepted observations
-  -> warehouse verification
-  -> evidence export
-
-Rejected records
-  -> dead-letter queue
-  -> incident
-  -> remediation
-  -> replay
-  -> audit trail
-```
-
-Every record that matters is tied to one or more of:
-
-```text
-run_id
-trace_id
-message_id
-incident_id
-dlq_id
+```bash
+make check
+make incident-demo
+make replay-incident
+make verify-warehouse
+python -m openhip.cli verify-replay-invariants
+make export-incident-report
+make docs
+make web-build
 ```
 
 ## Evidence
 
-The evidence package is the proof layer. It contains JSON reports, DLQ state before and after replay, quality checks, audit events, and metrics samples. See [docs/evidence.md](docs/evidence.md).
+Evidence files live under `evidence/`. Runtime reports are generated under `reports/` and `evidence/`.
 
-## Data policy
+Important files:
 
-This project uses synthetic/demo data and small public reference samples only. It must not ingest, store, display, or process PHI, employer data, credentials, real patient records, or private operational data.
+```text
+evidence/incident-report.json
+evidence/quality-checks.json
+evidence/dlq-before.json
+evidence/dlq-after.json
+evidence/audit-events.json
+evidence/metrics-sample.prom
+evidence/replay-invariants.json
+```
 
-This is not a clinical system, not a medical device, and not a HIPAA certification claim.
+## Public data posture
 
-## Design posture
+The incident itself is synthetic so recovery is deterministic and safe to publish. Public-reference data is used only for non-patient context. The current sample is:
 
-The project is intentionally local-first. The public site is a portfolio and evidence surface. The operational service runs locally. Scaffolds are kept out of the main claims until they run under CI.
+```text
+data/public/provider_reference_sample.csv
+```
+
+## Safety boundary
+
+This repository does not process PHI. It does not accept hosted uploads. It is not a clinical decision support system. It does not claim HIPAA certification.

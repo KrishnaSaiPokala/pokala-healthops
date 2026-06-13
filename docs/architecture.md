@@ -1,68 +1,73 @@
 # Architecture
 
-The system is built around one operational object: an integration run. Every message, accepted observation, dead-letter record, replay event, check, and evidence artifact must tie back to a run, trace, message, or incident identifier.
+Pokala HealthOps is organized around one operational invariant:
+
+> A failed interface message must be explainable, replayable, auditable, and verifiable.
 
 ## Flow
 
 ```text
-ORU feed
+synthetic ORU feed
   -> contract validation
   -> terminology mapping
   -> demonstration MPI
-  -> accepted observations
+  -> accepted observation store
   -> warehouse checks
   -> evidence export
 
-Rejected messages
-  -> dead-letter queue
+failed validation or mapping
+  -> dead-letter message
   -> incident
   -> remediation
   -> replay
-  -> audit trail
+  -> audit
+  -> verification
 ```
 
-## Identifiers
+## Core objects
 
-| Identifier | Purpose |
+| Object | Purpose |
 | --- | --- |
-| `run_id` | Groups one ingest and recovery workflow |
-| `trace_id` | Follows a message through validation, DLQ, replay, and evidence |
-| `message_id` | Identifies the source message |
-| `incident_id` | Groups failures under an operational incident |
-| `dlq_id` | Identifies a rejected message that needs review or replay |
+| `IntegrationRun` | Groups one interface run and its counts. |
+| `RawMessage` | Captures inbound message payload, trace, and status. |
+| `DeadLetterMessage` | Stores failed payload, rule ID, category, trace, and replay state. |
+| `Incident` | Tracks operational failure, status, remediation, and closure. |
+| `Observation` | Stores accepted lab results after mapping and MPI resolution. |
+| `AuditEvent` | Records incident and replay activity. |
+| `QualityCheck` | Stores warehouse verification results. |
 
-## Components
+## Reliability checks added
 
-| Area | Current implementation | Hardening target |
-| --- | --- | --- |
-| API | FastAPI | Add error-path tests and clearer response models |
-| Storage | SQLAlchemy over SQLite | Add migrations before claiming production readiness |
-| Contracts | YAML loaded at validation time | Add rule schema, severity, and contract diff |
-| Terminology | Local mapping table | Add inactive map tests and remediation audit |
-| MPI | Demonstration exact and fuzzy matching | Add review-required outcomes and threshold tests |
-| DLQ | Persisted failed messages | Add state machine and replay attempt records |
-| Replay | Explicit replay after map fix | Add idempotency and partial-failure behavior |
-| Metrics | Prometheus endpoint | Add counters, labels, histograms, and SLO examples |
-| Evidence | JSON incident report | Add full evidence bundle and schema validation |
-| UI | Next.js command center | Read API state or static evidence JSON |
+The project now includes replay invariant checks in `openhip/reliability.py`.
 
-## Design choices
+They verify:
 
-### Local-first
+- no open DLQ remains after replay
+- no replay failures remain
+- incident status is remediated
+- observations are not duplicated by replay
+- required audit actions exist
+- warehouse checks pass
 
-Local-first keeps the demo reproducible and safe. The public site shows documentation and evidence. It does not host PHI or accept uploads.
+These checks are intentionally small and explicit. They are not a substitute for production operations, but they turn the portfolio demo from a happy-path script into a testable recovery workflow.
 
-### Explicit replay
+## Boundaries
 
-Domain failures are not silently retried. A failed message becomes a managed DLQ item. Replay happens after a remediation action and is recorded in the audit trail.
+Implemented:
 
-### Synthetic core
+- local SQLite-backed workflow
+- FastAPI surface
+- CLI demo flow
+- evidence export
+- static evidence-backed web dashboard
+- public-reference sample enrichment
 
-Synthetic messages make the incident deterministic. Public reference data can enrich the demo, but it should not replace the controlled recovery path.
+Not implemented as production systems:
 
-## Known limitations
-
-1. The current contract engine is intentionally small.
-2. The current dashboard must not be treated as a production control plane.
-3. FHIR push is optional and off by default.
-4. dbt, Airflow, and Kubernetes are roadmap or scaffold unless their workflows run in CI.
+- hosted ingestion
+- real PHI handling
+- HIPAA certification
+- enterprise MPI
+- real FHIR certification
+- Kubernetes operations
+- Airflow/dbt production pipelines

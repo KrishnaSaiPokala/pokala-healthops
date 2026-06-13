@@ -1,35 +1,17 @@
-:root { --bg:#040916; --panel:#0a1528; --panel2:#0e1e35; --line:rgba(180,230,255,.16); --text:#eef8ff; --muted:#9eb7cc; --accent:#4fd1c5; --blue:#6aa8ff; --warn:#ffd166; --bad:#ff6b6b; --good:#6ee7b7; }
-.md-main { background: radial-gradient(circle at 7% 0%, rgba(79,209,197,.20), transparent 26%), radial-gradient(circle at 95% 8%, rgba(106,168,255,.20), transparent 30%), linear-gradient(135deg,#040916,#08152a 46%,#02050c); }
-.md-main__inner { max-width: 1600px; }
-.md-content { max-width: none; color: var(--text); }
-.md-sidebar { display: none; }
-.md-typeset h1, .md-typeset h2, .md-typeset h3 { color: white; font-weight: 900; letter-spacing: -.03em; }
-.md-typeset p, .md-typeset li, .md-typeset td { color: #dcecff; }
-.app-shell { display: grid; grid-template-columns: 250px 1fr; gap: 18px; min-height: 720px; }
-.rail { border:1px solid var(--line); border-radius:28px; background:rgba(10,21,40,.82); padding:18px; position:sticky; top:80px; height:max-content; }
-.brand { font-size:1.25rem; font-weight:950; color:white; line-height:1.05; }
-.rail small { color:var(--muted); font-weight:700; }
-.navitem { display:block; border:1px solid var(--line); border-radius:16px; padding:11px 12px; margin:9px 0; color:#eaf7ff !important; text-decoration:none; background:rgba(255,255,255,.05); font-weight:800; }
-.navitem.active { background:linear-gradient(135deg,rgba(79,209,197,.28),rgba(106,168,255,.20)); border-color:rgba(79,209,197,.5); }
-.main-app { display:flex; flex-direction:column; gap:18px; }
-.topbar { border:1px solid var(--line); border-radius:28px; padding:22px 24px; background:rgba(10,21,40,.78); display:flex; justify-content:space-between; gap:20px; align-items:center; }
-.eyebrow { color:var(--accent) !important; text-transform:uppercase; letter-spacing:.18em; font-size:.74rem; font-weight:950; margin:0 0 8px; }
-.title { font-size:clamp(2.2rem,5vw,5.8rem); line-height:.92; margin:0; color:white; font-weight:950; letter-spacing:-.06em; }
-.subtitle { font-size:1.15rem; color:#dcecff !important; max-width:900px; }
-.status-pill { border:1px solid rgba(110,231,183,.35); color:#b9ffe4; background:rgba(110,231,183,.10); padding:10px 14px; border-radius:999px; font-weight:950; white-space:nowrap; }
-.grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
-.grid-2 { display:grid; grid-template-columns:1.2fr .8fr; gap:14px; }
-.card { border:1px solid var(--line); border-radius:24px; background:linear-gradient(180deg,rgba(14,30,53,.92),rgba(8,18,34,.90)); padding:20px; box-shadow:0 22px 70px rgba(0,0,0,.25); }
-.label { color:var(--muted); text-transform:uppercase; letter-spacing:.1em; font-size:.74rem; font-weight:950; }
-.metric { color:white; font-size:2.5rem; line-height:1; font-weight:950; margin:8px 0; }
-.good { color:var(--good); } .bad { color:var(--bad); } .warn { color:var(--warn); } .blue { color:var(--blue); }
-.table { width:100%; border-collapse:separate; border-spacing:0 8px; }
-.table th { color:var(--muted); text-align:left; text-transform:uppercase; font-size:.72rem; letter-spacing:.1em; }
-.table td { background:rgba(255,255,255,.05); padding:12px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-.table td:first-child { border-left:1px solid var(--line); border-radius:14px 0 0 14px; }
-.table td:last-child { border-right:1px solid var(--line); border-radius:0 14px 14px 0; }
-.timeline { display:grid; gap:10px; }
-.step { border-left:4px solid var(--accent); background:rgba(255,255,255,.055); border-radius:16px; padding:13px 16px; }
-.step strong { color:white; }
-.pill { display:inline-block; padding:7px 10px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.06); margin:4px 4px 0 0; font-weight:800; }
-@media(max-width:1000px){ .app-shell{grid-template-columns:1fr}.rail{position:relative;top:0}.grid,.grid-2{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start} }
+:root {
+  --md-primary-fg-color: #0f766e;
+  --md-accent-fg-color: #06b6d4;
+}
+
+.md-typeset h1,
+.md-typeset h2 {
+  letter-spacing: -0.02em;
+}
+
+.md-typeset table:not([class]) {
+  font-size: 0.72rem;
+}
+
+.md-typeset code {
+  border-radius: 0.25rem;
+}
