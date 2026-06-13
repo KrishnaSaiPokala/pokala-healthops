@@ -1,0 +1,11 @@
+{
+  "incident_id": "INC-20260602-LAB-CODE-FORMAT",
+  "state": "after_replay",
+  "open_dlq": 0,
+  "replayed": 218,
+  "failed_replay": 0,
+  "by_rule": {
+    "ORU.OBS.CODE.MAP_REQUIRED": 0
+  },
+  "status": "recovered"
+}

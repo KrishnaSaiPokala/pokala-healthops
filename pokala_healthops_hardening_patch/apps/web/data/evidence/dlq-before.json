@@ -1,0 +1,17 @@
+{
+  "incident_id": "INC-20260602-LAB-CODE-FORMAT",
+  "state": "before_replay",
+  "open_dlq": 218,
+  "by_rule": {
+    "ORU.OBS.CODE.MAP_REQUIRED": 218
+  },
+  "by_category": {
+    "terminology_mapping": 218
+  },
+  "example_failure": {
+    "source_code": "LAB:GLUCOSE_FASTING",
+    "rule_id": "ORU.OBS.CODE.MAP_REQUIRED",
+    "category": "terminology_mapping",
+    "status": "open"
+  }
+}
