@@ -1,4 +1,4 @@
-name: ci
+﻿name: ci
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
       - name: Build flagship web site
         working-directory: apps/web
         run: |
-          npm install
+          npm ci
           npm run typecheck
           npm run build
 
@@ -75,7 +75,7 @@ jobs:
         env:
           GITHUB_PAGES: "true"
         run: |
-          npm install
+          npm ci
           npm run typecheck
           npm run build
 
