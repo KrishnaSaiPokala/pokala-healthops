@@ -4,6 +4,7 @@ import typer
 from rich import print
 
 from openhip.pipeline import (
+    INCIDENT_ID,
     demo_run,
     export_incident_report,
     incident_demo,
@@ -12,6 +13,7 @@ from openhip.pipeline import (
     summarize,
     verify_warehouse,
 )
+from openhip.reliability import assert_replay_invariants, write_replay_invariant_report
 
 app = typer.Typer(no_args_is_help=True, add_completion=False)
 
@@ -27,7 +29,7 @@ def incident() -> None:
 
 
 @app.command("replay-incident")
-def replay(incident_id: str = typer.Option("INC-20260602-LAB-CODE-FORMAT")) -> None:
+def replay(incident_id: str = typer.Option(INCIDENT_ID)) -> None:
     print(json.dumps(replay_incident(incident_id), indent=2))
 
 
@@ -37,8 +39,15 @@ def verify() -> None:
 
 
 @app.command("export-incident-report")
-def export(incident_id: str = typer.Option("INC-20260602-LAB-CODE-FORMAT")) -> None:
+def export(incident_id: str = typer.Option(INCIDENT_ID)) -> None:
     print(f"[green]Exported[/green] {export_incident_report(incident_id)}")
+
+
+@app.command("verify-replay-invariants")
+def verify_replay_invariants(incident_id: str = typer.Option(INCIDENT_ID)) -> None:
+    snapshot = assert_replay_invariants(incident_id)
+    write_replay_invariant_report(incident_id)
+    print(json.dumps(snapshot, indent=2))
 
 
 @app.command("mpi-demo")

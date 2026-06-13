@@ -1,0 +1,31 @@
+{
+  "incident_id": "INC-20260602-LAB-CODE-FORMAT",
+  "incident_status": "remediated",
+  "run_id": "RUN-20260602-0001",
+  "open_dlq": 0,
+  "replayed_accepted_dlq": 10,
+  "replayed_failed_dlq": 0,
+  "observations": 40,
+  "duplicate_observation_source_message_ids": [],
+  "audit_actions": [
+    "incident_opened",
+    "replay_completed"
+  ],
+  "quality_checks": [
+    {
+      "name": "fact_observation_has_rows",
+      "status": "passed",
+      "detail": "observations=40"
+    },
+    {
+      "name": "open_deadletters_zero_after_replay",
+      "status": "passed",
+      "detail": "open_dlq=0"
+    },
+    {
+      "name": "incident_remediated",
+      "status": "passed",
+      "detail": "status=remediated"
+    }
+  ]
+}

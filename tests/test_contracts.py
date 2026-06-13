@@ -12,6 +12,7 @@ def test_required_field_failure():
 def test_future_datetime_rejected():
     contract = load_contract("oru_contract")
     parsed = {f: "x" for f in contract["required_fields"]}
+    parsed["observation_value"] = "123.45"
     parsed["observation_datetime"] = "2999-01-01T00:00:00Z"
     result = validate_structure(parsed, contract)
     assert result is not None

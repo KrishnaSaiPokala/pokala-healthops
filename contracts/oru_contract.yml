@@ -12,6 +12,8 @@ required_fields:
   - observation_datetime
   - ordering_provider_id
 field_rules:
+  observation_value:
+    type: decimal
   observation_datetime:
     type: datetime
     cannot_be_future: true
