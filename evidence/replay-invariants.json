@@ -3,9 +3,9 @@
   "incident_status": "remediated",
   "run_id": "RUN-20260602-0001",
   "open_dlq": 0,
-  "replayed_accepted_dlq": 10,
+  "replayed_accepted_dlq": 218,
   "replayed_failed_dlq": 0,
-  "observations": 40,
+  "observations": 500,
   "duplicate_observation_source_message_ids": [],
   "audit_actions": [
     "incident_opened",
@@ -15,7 +15,7 @@
     {
       "name": "fact_observation_has_rows",
       "status": "passed",
-      "detail": "observations=40"
+      "detail": "observations=500"
     },
     {
       "name": "open_deadletters_zero_after_replay",
