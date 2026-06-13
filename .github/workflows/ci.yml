@@ -29,9 +29,24 @@ jobs:
       - run: python -m openhip.cli incident-demo
       - run: python -m openhip.cli replay-incident
       - run: python -m openhip.cli verify-warehouse
+      - run: python -m openhip.cli export-incident-report
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - working-directory: apps/web
+        run: npm install
+      - working-directory: apps/web
+        run: npm run typecheck
+      - working-directory: apps/web
+        run: npm run build
 
   docs:
-    needs: quality
+    needs: [quality, frontend]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:

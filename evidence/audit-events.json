@@ -1,0 +1,35 @@
+{
+  "incident_id": "INC-20260602-LAB-CODE-FORMAT",
+  "events": [
+    {
+      "event_type": "incident_opened",
+      "run_id": "RUN-20260602-LAB-ORU",
+      "actor": "system",
+      "detail": "218 records failed ORU.OBS.CODE.MAP_REQUIRED"
+    },
+    {
+      "event_type": "terminology_fix_applied",
+      "run_id": "RUN-20260602-LAB-ORU",
+      "actor": "demo_analyst",
+      "detail": "Added LAB:GLUCOSE_FASTING map in lab_map_v2"
+    },
+    {
+      "event_type": "replay_completed",
+      "run_id": "RUN-20260602-LAB-ORU",
+      "actor": "demo_analyst",
+      "detail": "218 records replayed successfully"
+    },
+    {
+      "event_type": "warehouse_verified",
+      "run_id": "RUN-20260602-LAB-ORU",
+      "actor": "system",
+      "detail": "3 of 3 checks passed"
+    },
+    {
+      "event_type": "evidence_exported",
+      "run_id": "RUN-20260602-LAB-ORU",
+      "actor": "system",
+      "detail": "Incident evidence report exported"
+    }
+  ]
+}

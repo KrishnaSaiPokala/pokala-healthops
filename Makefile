@@ -1,8 +1,8 @@
 SHELL := /bin/bash
 PYTHON ?= python3
 
-.PHONY: bootstrap check test lint api web demo incident-demo replay-incident \
-        verify-warehouse export-incident-report mpi-demo docs clean
+.PHONY: bootstrap check test lint api web web-build demo incident-demo replay-incident \
+        verify-warehouse export-incident-report evidence mpi-demo docs clean
 
 bootstrap:
 	$(PYTHON) -m venv .venv
@@ -23,6 +23,9 @@ api:
 web:
 	cd apps/web && npm install && npm run dev
 
+web-build:
+	cd apps/web && npm install && npm run typecheck && npm run build
+
 demo:
 	. .venv/bin/activate && python -m openhip.cli demo
 
@@ -38,11 +41,16 @@ verify-warehouse:
 export-incident-report:
 	. .venv/bin/activate && python -m openhip.cli export-incident-report
 
+evidence: incident-demo replay-incident verify-warehouse export-incident-report
+	@mkdir -p evidence
+	@cp -f reports/INC-20260602-LAB-CODE-FORMAT.json evidence/incident-report.generated.json || true
+	@echo "Evidence command completed. Generated runtime report is under evidence/ if available."
+
 mpi-demo:
 	. .venv/bin/activate && python -m openhip.cli mpi-demo
 
 docs:
-	. .venv/bin/activate && mkdocs build
+	. .venv/bin/activate && mkdocs build --strict
 
 clean:
 	rm -rf .pytest_cache .mypy_cache .ruff_cache reports site openhip.db
