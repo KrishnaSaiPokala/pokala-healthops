@@ -29,7 +29,7 @@ const deploymentLayers = [
   ["Container", "Dockerfiles for API and web plus Compose for API, web, Postgres, and Prometheus."],
   ["Kubernetes", "kind-compatible Deployments, Services, probes, and resource limits."],
   ["Packaging", "Helm chart for repeatable local cluster deployment."],
-  ["Orchestration", "Airflow DAG models incident demo â†’ replay â†’ invariants â†’ warehouse â†’ evidence export."],
+  ["Orchestration", "Airflow DAG models incident demo -> replay -> invariants -> warehouse -> evidence export."],
   ["Warehouse", "dbt Core + DuckDB recovery fact table and quality tests."],
   ["IaC guardrail", "OpenTofu reference module with no cloud resources declared."],
 ];
@@ -77,7 +77,7 @@ export default function Page() {
 
         <div className="hero-grid">
           <div>
-            <p className="eyebrow">No-PHI Â· healthcare reliability Â· platform engineering</p>
+            <p className="eyebrow">No-PHI | healthcare reliability | platform engineering</p>
             <h1>Healthcare Interface Reliability Control Plane</h1>
             <p className="hero-copy">
               A production-shaped, local-first platform for detecting interface failures, isolating bad messages,
@@ -105,7 +105,7 @@ export default function Page() {
               <span>Run</span>
               <strong>{incident.run_id}</strong>
             </div>
-            <div className="boundary">Synthetic only Â· no PHI Â· no clinical claims</div>
+            <div className="boundary">Synthetic only | no PHI | no clinical claims</div>
           </aside>
         </div>
       </section>
