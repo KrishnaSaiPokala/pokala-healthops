@@ -1,0 +1,9 @@
+﻿{
+  "replay_attempt_id": "RPLY-TERM-MAP-001",
+  "incident_id": "INC-TERM-MAP-001",
+  "attempted_records": 218,
+  "successful_records": 218,
+  "failed_records": 0,
+  "mode": "controlled recovery after terminology remediation",
+  "closure_predicate": "(R = F) and (O = 0) and (D = 0) and (W = T)"
+}

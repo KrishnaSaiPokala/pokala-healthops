@@ -1,0 +1,10 @@
+﻿{
+  "events": [
+    { "step": 1, "event_type": "incident.opened", "summary": "Terminology failure incident opened for synthetic ORU-style feed." },
+    { "step": 2, "event_type": "dlq.isolated", "summary": "218 invalid or unmapped terminology records isolated from warehouse path." },
+    { "step": 3, "event_type": "terminology.remediated", "summary": "Mapping condition remediated before recovery." },
+    { "step": 4, "event_type": "recovery.completed", "summary": "218 of 218 isolated records recovered." },
+    { "step": 5, "event_type": "warehouse.verified", "summary": "3 of 3 warehouse checks passed." },
+    { "step": 6, "event_type": "evidence.exported", "summary": "Closure evidence exported for reviewer inspection." }
+  ]
+}

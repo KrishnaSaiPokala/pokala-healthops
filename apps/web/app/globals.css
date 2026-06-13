@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #03050a;
   --bg2: #080d18;
   --panel: rgba(13, 21, 34, 0.86);
@@ -413,3 +413,368 @@ td:last-child { border-right: 1px solid var(--line); border-radius: 0 14px 14px 
     grid-column: 2;
   }
 }
+/* === Pokala HealthOps final polish start === */
+:root {
+  --pho-bg: #07111f;
+  --pho-card: rgba(15, 23, 42, 0.74);
+  --pho-card-strong: rgba(15, 23, 42, 0.94);
+  --pho-border: rgba(148, 163, 184, 0.20);
+  --pho-muted: #94a3b8;
+  --pho-text: #e5eefb;
+  --pho-teal: #5eead4;
+  --pho-blue: #93c5fd;
+  --pho-green: #86efac;
+}
+
+html { scroll-behavior: smooth; }
+body { background: radial-gradient(circle at top left, rgba(94, 234, 212, 0.11), transparent 32rem), var(--pho-bg); }
+
+.pho-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px;
+  color: var(--pho-text);
+}
+
+.pho-section { scroll-margin-top: 112px; }
+
+.pho-topbar {
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 16px;
+  margin-bottom: 28px;
+  border: 1px solid var(--pho-border);
+  border-radius: 999px;
+  background: rgba(7, 17, 31, 0.82);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.26);
+}
+
+.pho-brand, .pho-nav a, .pho-button {
+  text-decoration: none;
+}
+
+.pho-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--pho-text);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.pho-brand-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--pho-teal);
+  box-shadow: 0 0 20px rgba(94, 234, 212, 0.78);
+}
+
+.pho-nav {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pho-nav::-webkit-scrollbar { display: none; }
+
+.pho-nav a {
+  color: #cbd5e1;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 8px 11px;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.pho-nav a:hover {
+  border-color: var(--pho-border);
+  color: var(--pho-teal);
+  background: rgba(94, 234, 212, 0.08);
+}
+
+.pho-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: 24px;
+  align-items: stretch;
+  min-height: 560px;
+}
+
+.pho-hero-copy, .pho-console-card, .pho-tabs-card, .pho-layer-detail, .pho-command-card, .pho-proof-stack, .pho-footer {
+  border: 1px solid var(--pho-border);
+  border-radius: 28px;
+  background: var(--pho-card);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+}
+
+.pho-hero-copy {
+  padding: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pho-eyebrow, .pho-label {
+  color: var(--pho-teal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+.pho-hero h1 {
+  font-size: clamp(2.6rem, 6vw, 5.7rem);
+  line-height: 0.92;
+  margin: 0;
+  letter-spacing: -0.07em;
+}
+
+.pho-lede {
+  max-width: 720px;
+  color: #cbd5e1;
+  font-size: 1.12rem;
+  line-height: 1.75;
+  margin: 24px 0;
+}
+
+.pho-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.pho-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 12px 16px;
+  border: 1px solid var(--pho-border);
+  color: var(--pho-text);
+  font-weight: 800;
+}
+.pho-button-primary {
+  background: var(--pho-teal);
+  color: #042f2e;
+  border-color: var(--pho-teal);
+}
+
+.pho-boundary {
+  color: #a7f3d0;
+  margin: 26px 0 0;
+  font-weight: 700;
+}
+
+.pho-console-card {
+  padding: 26px;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.78));
+}
+
+.pho-console-head, .pho-section-heading, .pho-ledger-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.pho-console-head h2, .pho-section-heading h2, .pho-layer-detail h3, .pho-command-card h3, .pho-proof-stack h3 {
+  margin: 0;
+}
+
+.pho-status {
+  color: #052e16;
+  background: var(--pho-green);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 900;
+  font-size: 0.76rem;
+}
+
+.pho-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.pho-metric {
+  border: 1px solid var(--pho-border);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(2, 6, 23, 0.38);
+}
+.pho-metric span { display: block; color: var(--pho-muted); font-size: 0.82rem; }
+.pho-metric strong { display: block; margin-top: 6px; font-size: 2rem; }
+.pho-proof-line {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(94, 234, 212, 0.08);
+  color: #ccfbf1;
+  font-weight: 700;
+}
+
+.pho-tabs-card, .pho-section {
+  margin-top: 24px;
+}
+
+.pho-tabs-card, .pho-section:not(.pho-hero):not(.pho-platform-grid) {
+  padding: 28px;
+}
+
+.pho-section-heading {
+  flex-direction: column;
+  max-width: 840px;
+  margin-bottom: 22px;
+}
+.pho-section-heading p:not(.pho-eyebrow) { color: #cbd5e1; line-height: 1.7; margin: 0; }
+.pho-section-heading h2 { font-size: clamp(1.8rem, 3vw, 3rem); letter-spacing: -0.04em; }
+
+.pho-tab-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.pho-tab, .pho-layer {
+  border: 1px solid var(--pho-border);
+  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.72);
+  border-radius: 999px;
+  padding: 10px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.pho-tab.active, .pho-layer.active {
+  background: rgba(94, 234, 212, 0.14);
+  color: var(--pho-teal);
+  border-color: rgba(94, 234, 212, 0.48);
+}
+
+.pho-tab-panel {
+  margin-top: 16px;
+  border: 1px solid var(--pho-border);
+  border-radius: 22px;
+  padding: 22px;
+  background: rgba(2, 6, 23, 0.34);
+}
+.pho-tab-panel h3 { margin-top: 0; }
+.pho-tab-panel p { color: #cbd5e1; line-height: 1.65; }
+
+.pho-timeline { display: grid; gap: 12px; }
+.pho-timeline div {
+  display: grid;
+  grid-template-columns: 44px 190px 1fr;
+  gap: 12px;
+  align-items: start;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  padding-bottom: 12px;
+}
+.pho-timeline span { color: var(--pho-teal); font-weight: 900; }
+.pho-timeline p { margin: 0; }
+
+.pho-evidence-list details {
+  border: 1px solid var(--pho-border);
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 10px;
+  background: rgba(15, 23, 42, 0.48);
+}
+.pho-evidence-list summary { cursor: pointer; font-weight: 800; color: var(--pho-blue); }
+.pho-evidence-list pre {
+  overflow-x: auto;
+  color: #dbeafe;
+  background: rgba(2, 6, 23, 0.62);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.pho-architecture-grid, .pho-platform-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.25fr);
+  gap: 18px;
+}
+.pho-layer-list { display: grid; gap: 10px; align-content: start; }
+.pho-layer { border-radius: 16px; text-align: left; }
+.pho-layer-detail { padding: 24px; }
+.pho-layer-detail dl { display: grid; gap: 16px; }
+.pho-layer-detail dt { color: var(--pho-teal); font-weight: 900; }
+.pho-layer-detail dd { margin: 4px 0 0; color: #cbd5e1; line-height: 1.6; }
+
+.pho-stepper {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+.pho-step {
+  border: 1px solid var(--pho-border);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(2, 6, 23, 0.34);
+}
+.pho-step span { color: var(--pho-teal); font-weight: 900; }
+.pho-step h3 { margin: 10px 0 8px; }
+.pho-step p { color: #cbd5e1; font-size: 0.9rem; line-height: 1.55; }
+
+.pho-platform-grid { align-items: stretch; }
+.pho-platform-grid .pho-section-heading { margin: 0; }
+.pho-command-card, .pho-proof-stack { padding: 24px; }
+.pho-command-list { display: grid; gap: 10px; margin-top: 16px; }
+.pho-command-list button {
+  text-align: left;
+  border: 1px solid var(--pho-border);
+  border-radius: 14px;
+  background: rgba(2, 6, 23, 0.42);
+  color: #bfdbfe;
+  padding: 12px;
+  cursor: pointer;
+}
+.pho-command-list button:hover { border-color: rgba(94, 234, 212, 0.52); }
+.pho-copy-status { color: var(--pho-muted); }
+.pho-proof-stack ul { padding-left: 18px; color: #cbd5e1; line-height: 1.9; }
+
+.pho-ledger { display: grid; gap: 12px; }
+.pho-ledger-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) 120px 120px;
+  align-items: center;
+  border: 1px solid var(--pho-border);
+  border-radius: 18px;
+  padding: 18px;
+  background: rgba(2, 6, 23, 0.34);
+}
+.pho-ledger-row h3, .pho-ledger-row p { margin: 0; }
+.pho-ledger-row p { color: #cbd5e1; margin-top: 6px; }
+.pho-ledger-row strong { color: var(--pho-blue); }
+.pho-ledger-row span { color: var(--pho-green); font-weight: 900; }
+
+.pho-footer {
+  margin: 26px 0 8px;
+  padding: 18px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+@media (max-width: 920px) {
+  .pho-topbar { align-items: flex-start; border-radius: 24px; flex-direction: column; }
+  .pho-nav { width: 100%; justify-content: flex-start; }
+  .pho-hero, .pho-architecture-grid, .pho-platform-grid { grid-template-columns: 1fr; }
+  .pho-hero-copy { padding: 28px; }
+  .pho-stepper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pho-timeline div { grid-template-columns: 42px 1fr; }
+  .pho-timeline p { grid-column: 2; }
+  .pho-ledger-row { grid-template-columns: 1fr; gap: 10px; }
+}
+
+@media (max-width: 560px) {
+  .pho-shell { padding: 10px; }
+  .pho-metrics-grid, .pho-stepper { grid-template-columns: 1fr; }
+  .pho-hero h1 { font-size: 2.65rem; }
+  .pho-tabs-card, .pho-section:not(.pho-hero):not(.pho-platform-grid) { padding: 18px; }
+}
+/* === Pokala HealthOps final polish end === */

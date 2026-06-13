@@ -1,0 +1,20 @@
+﻿{
+  "incident_id": "INC-TERM-MAP-001",
+  "title": "Terminology mapping failure recovery",
+  "boundary": "Synthetic no-PHI reference incident",
+  "inbound_messages": 500,
+  "accepted_initially": 282,
+  "terminology_failures": 218,
+  "recovered_messages": 218,
+  "open_dlq_after_recovery": 0,
+  "duplicate_observations": 0,
+  "warehouse_checks_passed": 3,
+  "warehouse_checks_total": 3,
+  "closure_status": "closed",
+  "non_claims": [
+    "No HIPAA certification claim",
+    "No production EHR integration claim",
+    "No clinical decision support claim",
+    "No patient-safety outcome claim"
+  ]
+}

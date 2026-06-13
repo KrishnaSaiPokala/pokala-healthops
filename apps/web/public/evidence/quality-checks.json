@@ -1,0 +1,25 @@
+﻿{
+  "checks": [
+    {
+      "id": "warehouse_expected_count",
+      "name": "Recovered warehouse count reconciles to inbound total",
+      "status": "passed",
+      "expected": 500,
+      "observed": 500
+    },
+    {
+      "id": "open_dlq_zero",
+      "name": "Open DLQ is zero after recovery",
+      "status": "passed",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "id": "duplicate_observations_zero",
+      "name": "Duplicate observations remain zero",
+      "status": "passed",
+      "expected": 0,
+      "observed": 0
+    }
+  ]
+}
