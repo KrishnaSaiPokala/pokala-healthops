@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: fct_incident_recovery
+    description: "No-PHI incident recovery fact table for replay verification."
+    columns:
+      - name: incident_id
+        tests:
+          - not_null
+          - unique
+      - name: recovery_state
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["open", "partial", "remediated"]
+      - name: open_dlq
+        tests:
+          - not_null
+      - name: closure_ready
+        tests:
+          - not_null

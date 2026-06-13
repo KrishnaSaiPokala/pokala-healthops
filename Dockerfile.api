@@ -1,0 +1,21 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV HEALTHOPS_ENV=local
+
+COPY pyproject.toml README.md ./
+COPY openhip ./openhip
+COPY apps/api ./apps/api
+COPY contracts ./contracts
+COPY data ./data
+COPY evidence ./evidence
+
+RUN python -m pip install --upgrade pip && \
+    python -m pip install --no-cache-dir -e ".[dev]"
+
+EXPOSE 8000
+
+CMD ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

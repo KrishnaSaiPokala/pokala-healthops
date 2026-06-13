@@ -16,3 +16,10 @@ pokala_healthops_hardening_patch/
 pokala_healthops_staff_chunk/
 APPLY.md
 APPLY-*.ps1
+warehouse/target/
+warehouse/logs/
+*.duckdb
+.dbt/
+airflow/logs/
+airflow/plugins/
+airflow/config/
