@@ -3,71 +3,154 @@ import { getEvidenceSummary } from "../lib/evidence";
 export default function Page() {
   const evidence = getEvidenceSummary();
   const incident = evidence.incident;
+  const counts = incident.counts;
   const statusText = incident.status.toUpperCase();
 
-  return (
-    <main className="shell">
-      <aside className="rail">
-        <div className="brand">Pokala<br />HealthOps</div>
-        <div className="rail-sub">Interface reliability demo</div>
-        <nav className="nav">
-          <a className="active" href="#command">Command Center</a>
-          <a href="#incident">Incident</a>
-          <a href="#dlq">DLQ</a>
-          <a href="#warehouse">Verification</a>
-          <a href="#audit">Audit</a>
-        </nav>
-        <div className="no-phi">Synthetic data only. No PHI. No clinical claims.</div>
-      </aside>
+  const proofCards = [
+    {
+      label: "Inbound lab messages",
+      value: counts.inbound_messages.toString(),
+      detail: "Synthetic ORU feed processed through the incident path",
+      tone: "blue"
+    },
+    {
+      label: "Terminology failures",
+      value: counts.rejected_before_replay.toString(),
+      detail: `Rejected by ${incident.rule_id}`,
+      tone: "red"
+    },
+    {
+      label: "Recovered by replay",
+      value: counts.replayed_after_fix.toString(),
+      detail: "Remediated after controlled map update",
+      tone: "green"
+    },
+    {
+      label: "Open DLQ after recovery",
+      value: counts.open_dlq_after_replay.toString(),
+      detail: "Verified post-replay operating state",
+      tone: "green"
+    }
+  ];
 
-      <section className="workspace">
-        <header id="command" className="topbar">
-          <div>
-            <p className="eyebrow">Evidence backed Â· local first Â· no PHI</p>
-            <h1>InterfaceOps Command Center</h1>
-            <p className="lead">
-              Detect, triage, replay, verify, and audit one controlled healthcare interface failure.
-              Counts on this page come from committed evidence JSON, not inline UI constants.
+  const systemSignals = [
+    "No-PHI synthetic healthcare operations system",
+    "Dead-letter triage for interface failures",
+    "Deterministic replay after remediation",
+    "Warehouse verification after recovery",
+    "Evidence export for incident review",
+    "Audit trail for operational actions"
+  ];
+
+  return (
+    <main className="case-shell">
+      <section className="hero">
+        <div className="hero-copy">
+          <div className="kicker">No-PHI · Healthcare operations · Reliability engineering</div>
+          <h1>Healthcare Interface Reliability Control Plane</h1>
+          <p className="hero-lead">
+            A synthetic health-ops command center that detects lab interface failures,
+            routes bad messages into a dead-letter queue, applies remediation, replays
+            recoverable records, verifies warehouse recovery, and exports incident evidence.
+          </p>
+
+          <div className="hero-actions">
+            <a href="#evidence">Evidence package</a>
+            <a href="#recovery">Recovery flow</a>
+            <a href="#boundaries">System boundary</a>
+          </div>
+        </div>
+
+        <div className="hero-panel">
+          <div className="panel-label">Current incident state</div>
+          <div className="incident-status">{statusText}</div>
+          <div className="incident-id">{incident.incident_id}</div>
+          <div className="status-grid">
+            <div>
+              <span>Run</span>
+              <strong>{incident.run_id}</strong>
+            </div>
+            <div>
+              <span>Rule</span>
+              <strong>{incident.rule_id}</strong>
+            </div>
+            <div>
+              <span>Policy</span>
+              <strong>No PHI</strong>
+            </div>
+            <div>
+              <span>Checks</span>
+              <strong>{evidence.passedChecks}/{evidence.totalChecks} passed</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="evidence" className="proof-grid">
+        {proofCards.map((card) => (
+          <article className={`proof-card ${card.tone}`} key={card.label}>
+            <span>{card.label}</span>
+            <strong>{card.value}</strong>
+            <p>{card.detail}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="two-column">
+        <article className="card narrative-card">
+          <div className="section-label">What this proves</div>
+          <h2>Operational recovery, not a static dashboard</h2>
+          <p>
+            This project is structured around an interface incident: failed terminology mapping,
+            DLQ isolation, remediation, replay, warehouse reconciliation, and evidence export.
+            The UI reads committed evidence JSON instead of hardcoded marketing numbers.
+          </p>
+
+          <div className="signal-list">
+            {systemSignals.map((signal) => (
+              <div className="signal" key={signal}>{signal}</div>
+            ))}
+          </div>
+        </article>
+
+        <article id="recovery" className="card recovery-card">
+          <div className="section-label">Recovery path</div>
+          <h2>Detect ? Remediate ? Replay ? Verify ? Evidence</h2>
+
+          <div className="recovery-step">
+            <b>01 Detect</b>
+            <p>{counts.rejected_before_replay} records fail terminology contract enforcement.</p>
+          </div>
+          <div className="recovery-step">
+            <b>02 Remediate</b>
+            <p>
+              Map version {incident.remediation.new_mapping_version} adds{" "}
+              {incident.remediation.source_code}.
             </p>
           </div>
-          <div className="health">INCIDENT: {statusText}</div>
-        </header>
-
-        <section className="grid4">
-          {evidence.metrics.map((metric) => (
-            <div className={`card metric-card ${metric.tone}`} key={metric.label}>
-              <div className="label">{metric.label}</div>
-              <div className="value">{metric.value}</div>
-              <p>{metric.helper}</p>
-            </div>
-          ))}
-        </section>
-
-        <section id="incident" className="grid2">
-          <div className="card">
-            <div className="label">Incident</div>
-            <h2>{incident.incident_id}</h2>
-            <p>{incident.scenario}</p>
-            <span className="pill">Rule: {incident.rule_id}</span>
-            <span className="pill">Status: {incident.status}</span>
-            <span className="pill">Run: {incident.run_id}</span>
-            <span className="pill">Policy: no PHI</span>
+          <div className="recovery-step">
+            <b>03 Replay</b>
+            <p>{counts.replayed_after_fix} DLQ records recover through controlled replay.</p>
           </div>
-
-          <div className="card timeline">
-            <div className="step"><strong>Detect</strong><br />{incident.counts.rejected_before_replay} records failed the mapping rule.</div>
-            <div className="step"><strong>Remediate</strong><br />Map version {incident.remediation.new_mapping_version} added {incident.remediation.source_code}.</div>
-            <div className="step"><strong>Replay</strong><br />{incident.counts.replayed_after_fix} records recovered through replay.</div>
-            <div className="step"><strong>Verify</strong><br />{evidence.passedChecks}/{evidence.totalChecks} warehouse checks passed.</div>
+          <div className="recovery-step">
+            <b>04 Verify</b>
+            <p>{evidence.passedChecks}/{evidence.totalChecks} warehouse checks pass after recovery.</p>
           </div>
-        </section>
+        </article>
+      </section>
 
-        <section id="dlq" className="card">
-          <div className="label">Dead Letter Queue</div>
-          <h2>Failure Queue Recovery</h2>
+      <section className="two-column">
+        <article className="card">
+          <div className="section-label">Dead-letter queue recovery</div>
+          <h2>Failure queue drained after remediation</h2>
           <table>
             <thead>
-              <tr><th>Rule</th><th>Before replay</th><th>After replay</th><th>Outcome</th></tr>
+              <tr>
+                <th>Rule</th>
+                <th>Before</th>
+                <th>After</th>
+                <th>Result</th>
+              </tr>
             </thead>
             <tbody>
               {evidence.ruleBreakdown.map((row) => (
@@ -75,46 +158,88 @@ export default function Page() {
                   <td>{row.rule}</td>
                   <td>{row.before} open</td>
                   <td>{row.after} open</td>
-                  <td className="ok">{row.after === 0 ? "Recovered" : "Open"}</td>
+                  <td className={row.after === 0 ? "ok" : "fail"}>
+                    {row.after === 0 ? "Recovered" : "Open"}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </section>
+        </article>
 
-        <section id="warehouse" className="grid2">
-          <div className="card">
-            <div className="label">Warehouse Verification</div>
-            <h2>{evidence.passedChecks}/{evidence.totalChecks} Checks Passed</h2>
-            <table>
-              <tbody>
-                {evidence.checks.map((check) => (
-                  <tr key={check.name}>
-                    <td>{check.name}</td>
-                    <td className="ok">{check.status.toUpperCase()}</td>
-                    <td>{String(check.observed)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <article className="card">
+          <div className="section-label">Warehouse reconciliation</div>
+          <h2>Post-replay quality checks</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Check</th>
+                <th>Status</th>
+                <th>Observed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {evidence.checks.map((check) => (
+                <tr key={check.name}>
+                  <td>{check.name}</td>
+                  <td className="ok">{check.status.toUpperCase()}</td>
+                  <td>{String(check.observed)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </article>
+      </section>
 
-          <div id="audit" className="card">
-            <div className="label">Audit Evidence</div>
-            <h2>Operational Events</h2>
-            <table>
-              <tbody>
-                {evidence.auditEvents.events.map((event) => (
-                  <tr key={event.event_type}>
-                    <td>{event.event_type}</td>
-                    <td>{event.actor}</td>
-                    <td>{event.detail}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+      <section id="boundaries" className="boundary-grid">
+        <article className="card boundary implemented">
+          <div className="section-label">Implemented</div>
+          <h2>Reliable demo system</h2>
+          <ul>
+            <li>Synthetic ORU ingestion path</li>
+            <li>Contract and terminology validation</li>
+            <li>DLQ isolation and replay</li>
+            <li>Incident evidence export</li>
+            <li>Warehouse verification checks</li>
+            <li>Audit event capture</li>
+          </ul>
+        </article>
+
+        <article className="card boundary">
+          <div className="section-label">Explicitly not claimed</div>
+          <h2>Clean boundaries</h2>
+          <ul>
+            <li>No real patient data</li>
+            <li>No PHI handling claim</li>
+            <li>No HIPAA certification claim</li>
+            <li>No production EHR integration claim</li>
+            <li>No clinical decision support claim</li>
+            <li>No live hospital deployment claim</li>
+          </ul>
+        </article>
+      </section>
+
+      <section className="card audit-card">
+        <div className="section-label">Audit evidence</div>
+        <h2>Operational trail</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Actor</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            {evidence.auditEvents.events.map((event) => (
+              <tr key={event.event_type}>
+                <td>{event.event_type}</td>
+                <td>{event.actor}</td>
+                <td>{event.detail}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     </main>
   );
