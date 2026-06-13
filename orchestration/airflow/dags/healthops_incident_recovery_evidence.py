@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from airflow import DAG
 from airflow.operators.bash import BashOperator
+
+from airflow import DAG
 
 DEFAULT_ARGS = {"owner": "healthops", "depends_on_past": False, "retries": 0}
 
